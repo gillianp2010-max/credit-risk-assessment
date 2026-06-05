@@ -1,0 +1,6 @@
+customer_id,txn_count,total_debit,total_credit,avg_amount,all_desc,kw_rent,kw_netflix,kw_tesco,kw_payroll,kw_bonus,avg_transaction_value,salary_stability,net_cashflow,defaulted_within_90d
+CUST_0001,3,-65.98,2500.0,811.34,acme ltd payroll feb tesco london netflix com,0,1,1,1,0,855.3266666666667,1,2565.98,0
+CUST_0002,2,-650.0,1800.0,575.0,acme ltd payroll feb rent feb,1,0,0,1,0,1225.0,1,2450.0,1
+CUST_0003,2,-300.0,1200.0,450.0,upwork payout airbnb host fee,0,0,0,0,0,750.0,0,1500.0,0
+CUST_0004,2,-400.0,900.0,250.0,acme ltd payroll feb rent feb,1,0,0,1,0,650.0,1,1300.0,1
+CUST_0005,1,0.0,6500.0,6500.0,bonus payment,0,0,0,0,1,6500.0,0,6500.0,0
