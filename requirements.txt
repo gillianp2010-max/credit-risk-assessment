@@ -1,3 +1,5 @@
+echo "# updated" >> requirements.txt
+
 fastapi
 uvicorn
 pandas
