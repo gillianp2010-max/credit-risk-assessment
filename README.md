@@ -26,7 +26,7 @@ I used GitHub Codespaces to run and test this project:
 1. Created a Codespace on the main branch
 2. Installed dependencies: `pip install -r requirements.txt`
 3. Ran Part 1: `python data_prep/prepare_data_gillian.py`
-4. Started the API: `uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload`
+4. Started the API: `python3 -m uvicorn api.app:app --reload --host 0.0.0.0 --port 8000`
 5. Accessed the API through the forwarded port URL + `/docs` endpoint
 
 The FastAPI Swagger UI loaded at `/docs`, providing interactive API documentation for testing.
