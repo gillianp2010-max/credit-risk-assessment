@@ -127,9 +127,9 @@ I collaborated extensively with AI tools (Databricks Genie/Microsoft Copilot) to
   * Matches incremental ingestion used for cloud cost control.
 
 
-<sub>*(Databricks Genie (Claude) sources for production ML deployment: [Azure ML - Batch vs real-time scoring](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-batch), [Azure cost optimization for ML workloads](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/machine-learning-inference), [Reducing ML inference costs](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/ai/real-time-scoring/python-model))*</sub>
+<sub>*(Databricks Genie (Claude) sources for production ML deployment: [Azure ML - Batch vs real-time scoring](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-batch), [Azure ML cost optimization](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-manage-optimize-cost), [Azure ML deployment guide](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-deploy-online-endpoints)*</sub>
 
-<sub>*(Microsoft Copilot validation: The batch vs real‑time separation, incremental loading, and cost‑optimisation recommendations are correct. Cross‑checked against Azure ML's batch vs online endpoints: https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-batch, Azure ML inference cost optimisation: https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/machine-learning-inference, and real‑time scoring patterns: https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/ai/real-time-scoring/python-model. All sources align with the answer.)*</sub>
+<sub>*(Microsoft Copilot validation: The batch vs real‑time separation, incremental loading, and cost‑optimisation recommendations are correct. Cross‑checked against Azure ML's batch vs online endpoints: https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-batch, Azure ML cost optimization: https://learn.microsoft.com/en-us/azure/machine-learning/how-to-manage-optimize-cost, and deployment guidance: https://learn.microsoft.com/en-us/azure/machine-learning/how-to-deploy-online-endpoints. All sources align with the answer.)*</sub>
 
 ---
 
@@ -243,9 +243,9 @@ I've built lightweight production monitoring tools addressing these concepts for
 
 ---
 
-<sub>*(Databricks Genie (Claude) sources: [MLOps best practices](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment), [Model monitoring documentation](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-monitor-models))*</sub>
+<sub>*(Databricks Genie (Claude) sources: [MLOps best practices](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment), [Azure ML monitoring overview](https://learn.microsoft.com/en-us/azure/machine-learning/monitor-azure-machine-learning)*</sub>
 
-<sub>*(Microsoft Copilot validation: The monitoring metrics (latency, volume, drift, confidence, error rates) and failure modes (drift, schema issues, bias, latency spikes, silent failures) match Microsoft's MLOps and model‑monitoring best practices. Cross‑checked against Azure ML model monitoring documentation: https://learn.microsoft.com/en-us/azure/microsoft-learning/how-to-monitor-models and model management guidance: https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment. No issues identified.)*</sub>
+<sub>*(Microsoft Copilot validation: The monitoring metrics (latency, volume, drift, confidence, error rates) and failure modes (drift, schema issues, bias, latency spikes, silent failures) match Microsoft's MLOps and model‑monitoring best practices. Cross‑checked against Azure ML model monitoring documentation: https://learn.microsoft.com/en-us/azure/machine-learning/how-to-monitor-model-performance (learn.microsoft.com in Bing) and model management guidance: https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment. No issues identified.)*</sub>
 
 ---
 
