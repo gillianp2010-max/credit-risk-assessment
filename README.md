@@ -13,7 +13,7 @@ This project implements a machine learning workflow for credit risk prediction c
 * Structure: Setup → Required questions → Part 1-3 execution → Additional context
 * Length: Longer than maybe expected because I'm bridging from health/clinical domain to financial domain and wanted to reflect that
 * My approach: Understanding the bigger picture and stakeholder goals is core to how I work
-* My background: SQL-heavy workflow (weeks in SQL, then Python/R in final phases) — explains the learning curve and AI collaboration documented below
+* My background: SQL-heavy workflow (weeks in SQL, then Python/R in final phases)
 
 ---
 
@@ -103,19 +103,29 @@ I collaborated extensively with AI tools (Databricks Genie/Microsoft Copilot) to
    * Handle late-arriving transactions (e.g., offline card purchases settling days later)
    * Critical for cloud cost control
 
-**How I relate this to my experience:**
-* **Cloud migration work:**
-  * Led SQL Server → Snowflake migration on Azure
-  * Key pattern shift: runtime derivation → pre-compute and store (storage cheap, processing costs dominate)
-  * Re-engineered stored procedures/schemas for efficiency
-* **Latency monitoring:**
-  * Built Python-controlled/Flask visualizations for CDC latency monitoring
-  * Captured runtime metrics and hard examples for third-party debugging
-  * **Important:** My latency scale = hours/days, not milliseconds. Real-time API (<100ms) = outside my experience
-* **Outside my role:** API hosting, autoscaling, model-serving infrastructure (DevOps/SRE handled)
-* **Direct alignment:**
-  * Batch/real-time separation = frequent scheduled jobs + tabular storage
-  * Incremental loading = core migration pattern (load new data, recompute aggregates within time windows)
+
+**How I relate this to my experience**
+
+* **Cloud migration work**
+  * Led a full SQL Server → Snowflake migration on Azure, where the major performance gain came from the architecture shift (elastic compute, cheap storage, separation of workloads).  
+  * Adopted a pre‑compute and store pattern for heavy transformations — same principle as pre‑computing features for existing customers.  
+  * Re‑engineered stored procedures, functions and schemas for efficiency; architecture and SQL optimisation complement each other, especially in cloud environments.  
+  * This aligns with cloud‑native patterns and pre‑compute strategies.
+
+* **Latency monitoring**
+  * Built Python/Flask tools to monitor CDC latency and surface bottlenecks.  
+  * Captured runtime metrics and hard examples for third‑party debugging.  
+  * Latency in this domain was hours/days, not sub‑100ms, but the discipline of measure → monitor → optimise transfers directly.  
+  * Relevant to latency monitoring in production ML systems.
+
+* **Outside my role**
+  * API hosting, autoscaling, and model‑serving infrastructure were handled by DevOps/SRE.
+
+* **Direct alignment**
+  * Batch/real‑time separation → mirrors scheduled jobs + tabular storage patterns I’ve implemented.  
+  * Incremental loading → core migration pattern: load only new data, handle late‑arriving records, and avoid full‑history recomputation.  
+  * Matches incremental ingestion used for cloud cost control.
+
 
 <sub>*(Databricks Genie (Claude) sources for production ML deployment: [Azure ML - Batch vs real-time scoring](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-batch), [Azure cost optimization for ML workloads](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/machine-learning-inference), [Reducing ML inference costs](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/ai/real-time-scoring/python-model))*</sub>
 
@@ -137,7 +147,7 @@ Keeps model versioned, accessible, and decoupled from code.
 **How I relate this to my experience:**
 * **Web apps:**
   * Full control over Flask development
-  * Git-controlled releases deployed from central location via Posit Connect server (similar to Power BI/Databricks Dashboards publish)
+  * Git-controlled releases published (deployed) from central location via Posit Connect server (similar to Power BI/Databricks Dashboards publish feature)
   * FastAPI on Azure Container Apps/AKS = new territory
 * **Containers:**
   * Used Domino DataScience platform containers for scheduled Python jobs
@@ -156,28 +166,31 @@ Keeps model versioned, accessible, and decoupled from code.
 ## 5. If transaction volume jumped from thousands to millions per day, how would you rethink Part 1?
 
 **Suggested improvements:**
-1. Move from Pandas to Spark or Dask for distributed processing
-2. Store raw data in Parquet instead of CSV (columnar, compressed, cloud-optimized)
-3. Use Azure Data Lake for scalable storage (petabyte-scale)
-4. Build scheduled ETL pipeline using Azure Data Factory (orchestration, monitoring, error handling)
-5. Introduce incremental processing instead of full recomputation
+
+1. **Replace Pandas with distributed processing:**
+   * Move to Spark or Dask to handle millions of transactions
+   * Enables parallel processing across multiple nodes
+   
+2. **Switch from CSV to Parquet:**
+   * Columnar format = faster reads for aggregations
+   * Built-in compression reduces storage costs
+   
+3. **Implement incremental processing:**
+   * Load only new transactions (not full history each run)
+   * Recompute rolling window features using new + existing data
+   * Critical for cost control at scale
+
+4. **Add orchestration layer:**
+   * Use Azure Data Factory or similar for scheduling, monitoring, error handling
+   * Provides observability and retry logic
 
 **How I relate this to my experience:**
-* **The scaling problem:**
-  * SQL Server → Snowflake migration driven by this exact issue
-  * On-premise systems exhausted by volume (reports/extracts wouldn't run, no longer fit for purpose)
-  * Cloud storage/compute: reporting times from >1 day → minutes
-* **Performance testing:**
-  * 100% cell-to-cell comparison of original vs migrated reports
-  * Some too large for Pandas → switched to Polars
-  * Recently ran performance evaluation: Pandas vs Polars vs PySpark across data volumes
-  * Included `artifacts/replicate_performance_analysis.png` to showcase results
-* **Root causes identified:**
-  * **Infrastructure:** 20-year-old systems couldn't scale with data growth
-  * **Code patterns:** 
-    * Single large operations (locks source tables, can't resume on failure, hard to debug) vs modular pipeline stages with intermediate checkpoints (easier to monitor, retry failed steps, optimize bottlenecks)
-    * SQL Server had multiple derivations of similar processes (different teams, inconsistent logic) → Snowflake consolidated into reusable, shared, consistent code modules (same centralization principle as data storage)
-  * **Solution:** Infrastructure scaling + code optimization/re-engineering + schema design
+* Led SQL Server → Snowflake migration driven by volume scaling issues
+  * Cloud storage/compute: improved reporting times from >1 day → minutes
+* The test release process originally built in Pandas couldn't scale for larger extracts without batch processing - evaluated switch from Pandas and Polars for more streamlined single process testing
+  * Conducted performance testing: [Pandas](https://pandas.pydata.org/) vs [Polars](https://pola.rs/) vs [PySpark](https://spark.apache.org/docs/latest/api/python/) across data volumes
+  * See `artifacts/replicate_performance_analysis.png` for performance comparison results
+* Re-engineered pipelines from monolithic operations to modular stages with checkpoints
 
 <sub>*(Databricks Genie (Claude) sources for scaling best practices: [Azure Architecture - Big data architectures](https://learn.microsoft.com/en-us/azure/architecture/data-guide/big-data/), [Databricks - When to use Apache Spark](https://docs.databricks.com/en/getting-started/spark/index.html), [Azure - Batch processing patterns](https://learn.microsoft.com/en-us/azure/architecture/data-guide/big-data/batch-processing))*</sub>
 
@@ -187,20 +200,48 @@ Keeps model versioned, accessible, and decoupled from code.
 
 ## 6. What metrics would you track in production, and what could go wrong?
 
-**Metrics to track:**
-* **Prediction latency** *(aligns with: CDC source data transfer latency monitoring)*
-* **Prediction volume** *(aligns with: row count comparison from source to migrated data)*
+**Suggested metrics to track:**
+* Prediction latency
+* Prediction volume
 * Input feature drift
-* **Output drift** *(aligns with: cell-to-cell comparison of source vs target data)*
+* Output drift
 * Model confidence distribution
 * Error rates
 
-**What could go wrong:**
+**Suggested what could go wrong:**
 * Data drift causing degraded model performance
 * Unexpected input formats breaking the API
 * Model becoming biased due to changing customer behavior
 * Latency spikes under load
 * Silent failures if monitoring is not in place
+
+**How I relate this to my experience:**
+
+I've built lightweight production monitoring tools addressing these concepts for data pipelines and migrations. Demos below use dummy data and were built with RShiny/Flask.
+
+---
+
+#### [Performance Monitor (2022–2023)](https://gillianpaterson.shinyapps.io/stored_proc_debugger/)
+
+  * Investigated a SQL stored procedure believed to be the sole cause of intermittent contention and delays.  
+  * Added lightweight in‑procedure logging (no access to SQL diagnostics) to capture stage‑level execution times.  
+  * Identified optimisation opportunities to keep the web process within its strict five‑minute SLA.  
+  * Showed that delays had multiple contributors, not just the stored procedure — including external jobs and study‑specific setups.  
+  * Used an RShiny tool to present clear, data‑driven evidence, shifting discussions from assumptions to facts and improving root‑cause focus.  
+  * Aligns with SQL performance tuning and evidence‑based debugging practices.
+
+---
+
+#### [Data Integrity Monitor (2024)](https://gillianpaterson.shinyapps.io/dashboard_monitor/)
+
+  * Supported release testing during the SQL Server → Snowflake migration.  
+  * Ran 100% cell‑level comparisons (4M rows, 90+ columns) to confirm extract outputs matched pre‑migration results.  
+  * Detected edge‑case issues early, surfacing anomalies that would have reached users without automated validation.  
+  * Measured CDC latency, providing evidence that performance was below expectations.  
+  * Strengthened data quality by replacing manual spot‑checks with automated controls, reducing the risk of silent drift.  
+  * Aligns with data validation and automated QA practices used in production pipelines.
+
+---
 
 <sub>*(Databricks Genie (Claude) sources: [MLOps best practices](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment), [Model monitoring documentation](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-monitor-models))*</sub>
 
@@ -224,7 +265,8 @@ Keeps model versioned, accessible, and decoupled from code.
 * Exception: company-approved internal AI model where data doesn't leave company network
 
 **Important note on AI-generated information:**
-To progress this project, I had to assume the AI-provided information was correct to the best of my ability. In a real-world scenario, I would validate all domain-specific recommendations with subject matter experts and formal business documentation before implementation.
+* For this project: assumed AI information was correct to best of my ability
+* Real-world scenario: would validate domain-specific recommendations with subject matter experts and formal business documentation before implementation
 
 **This exercise was genuinely challenging:**
 * **The financial domain:** credit risk, banking APIs, Open Banking = completely unfamiliar
@@ -238,7 +280,11 @@ To progress this project, I had to assume the AI-provided information was correc
 * Learn financial terminology
 * Make sense of the assignment itself
 
-Without that support, I would not have been able to complete this project. I'm documenting this transparently because I believe intellectual honesty matters.
+**AI impact:**
+* Pre-AI methods possible (web searches, documentation, tutorials, trial-and-error) but more laborious
+* Engineering effort shifted: development → validation
+* Result: faster process, higher quality, less time
+* Documented transparently — intellectual honesty matters
 
 ---
 
@@ -326,11 +372,13 @@ The API returned:
 
 This confirmed the model loads correctly, accepts the expected input schema, and returns valid predictions.
 
-**Learning note:**
-Coming from a Flask background where I manually validated inputs and built custom response formats, FastAPI was initially confusing. When the Swagger UI page appeared at `/docs`, I didn't immediately recognize this was the expected outcome — not an error. I learned FastAPI automatically generates interactive API documentation from your code, and Pydantic handles validation declaratively (you define the schema once, FastAPI validates automatically). In Flask, I would have written manual validation logic and custom documentation. This "it just works" experience felt foreign at first, but is a key FastAPI feature that matters for rapid API development.
-
-**Proof of completion:**
 See `artifacts/proof_of_prediction.png` and `artifacts/proof_data_entry.png` for screenshots showing successful execution.
+
+**Learning note — Flask vs FastAPI:**  
+* When FastAPI showed the Swagger UI at `/docs`, it wasn’t immediately obvious to me that this was intentional, not an error. 
+* Learned that FastAPI auto‑generates documentation and Pydantic provides automatic input validation from a single schema.  
+* Realisation: I don’t need to manually build these pieces — FastAPI handles them by design, which is a big shift for rapid API development.
+
 
 ---
 
@@ -359,6 +407,7 @@ take-home-task/
 
 Modified structure being committed to Git:
 
+
 ```
 take-home-task/
 ├── api/
@@ -382,6 +431,7 @@ take-home-task/
 ├── requirements.txt        # NEW: Python dependencies
 └── README.md               # NEW: This documentation
 ```
+
 
 **Key additions:**
 * `prepare_data_gillian.py` — My data preparation implementation
@@ -408,7 +458,7 @@ take-home-task/
 * **Code split:** Pipelines ~90% SQL, Python/R for ETL orchestration, post-merge transformations, testing, QA, release, and ongoing monitoring
 * **Complexity:** 100s of tables, complex joins with derivation order dependencies
 * **Web apps:** Built on average ~2 RShiny/Flask apps per year (more during migration). Created proactive monitoring and quality frameworks that technical leads valued, though not widely adopted by wider team. Personally enjoyed this work and would have preferred more focus in this direction.
-* **Career goal:** Transitioning to Python as primary tool, seeking new challenging technical domains
+* **Career goal:** Expanding Python skills alongside SQL expertise, seeking new challenges and a change of scenery in different technical domains
 
 **What's new in this task:**
 * Financial domain (credit risk, Open Banking)
@@ -422,17 +472,24 @@ take-home-task/
 
 **Financial domain knowledge was entirely new.** Mapped financial concepts to health domain equivalents:
 
+<small>
+
 | Financial Concept | Health Domain Equivalent | Why This Mapping Worked |
-|-------------------|-------------------------|------------------------|
-| **Target:** Customer defaulted (0/1) | **Target:** Patient readmitted (0/1) | Binary outcome prediction |
-| **Transaction descriptions** ("TESCO", "RENT") | **Diagnosis codes** (ICD-10) | Text categorization |
-| **Keyword extraction** ("SALARY", "GAMBLING") | **Comorbidity flags** (diabetes=1, hypertension=1) | Binary features from text |
-| **Debit/Credit ratio** | **Symptom severity score** | Numeric risk indicator |
-| **Transaction frequency** | **Hospital visit frequency** | Behavioral metric |
-| **Customer aggregation** | **Patient aggregation** | One row per entity |
+|-------------------|-------------------------|--------------------------|
+| Target: Customer defaulted (0/1) | Target: Patient readmitted (0/1) | Binary outcome prediction |
+| Transaction descriptions ("TESCO", "RENT") | Diagnosis codes (ICD-10) | Text categorization |
+| Keyword extraction ("SALARY", "GAMBLING") | Comorbidity flags (diabetes=1, hypertension=1) | Binary features from text |
+| Debit/Credit ratio | Symptom severity score | Numeric risk indicator |
+| Transaction frequency | Hospital visit frequency | Behavioral metric |
+| Customer aggregation | Patient aggregation | One row per entity |
+
+</small>
+
 
 **Key insight:**
-Data engineering patterns are domain-agnostic. Once I mapped financial → health, the entire task clicked. Feature engineering, risk prediction, data quality checks, and aggregation patterns work the same way across domains.
+* Data engineering patterns could be considered domain-agnostic
+* Once I mapped financial → health, the entire task clicked
+* The concepts behind feature engineering, risk prediction, data quality checks, and aggregation patterns could be applied in very similar ways across domains (as demonstrated in the mapping table above)
 
 ---
 
@@ -442,6 +499,6 @@ Data engineering patterns are domain-agnostic. Once I mapped financial → healt
 
 * Retrain the model using extended features
 * Add model versioning and explicit feature schemas
-* Add monitoring for prediction drift and data drift
+* Add monitoring for prediction drift and data drift (similar to drift detection in my Data Integrity Monitor — see Question 6)
 * Add authentication and rate limiting to the API
 * Containerize the service for production deployment
