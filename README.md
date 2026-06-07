@@ -409,7 +409,7 @@ Modified structure being committed to Git:
 
 
 ```
-take-home-task/
+credit-risk-assessment/
 ├── api/
 │   ├── app.py              # FastAPI application (modified to align schema with model expectations)
 │   └── app_original.py     # NEW: Backup of original app.py
