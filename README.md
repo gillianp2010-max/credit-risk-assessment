@@ -499,6 +499,6 @@ take-home-task/
 
 * Retrain the model using extended features
 * Add model versioning and explicit feature schemas
-* Add monitoring for prediction drift and data drift (similar to drift detection in my Data Integrity Monitor — see Question 6)
+* Add monitoring for prediction drift and data drift *(similar to drift detection in my Data Integrity Monitor — see Question 6)*
 * Add authentication and rate limiting to the API
 * Containerize the service for production deployment
