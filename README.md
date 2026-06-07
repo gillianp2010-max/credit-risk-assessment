@@ -445,6 +445,7 @@ credit-risk-assessment/
 
 **Key modifications:**
 * `app.py` — Updated input schema to match model feature expectations
+* Added debugging print statements to `prepare_data_gillian.py` and `app.py`
 
 ---
 
