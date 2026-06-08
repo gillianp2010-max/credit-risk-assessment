@@ -55,13 +55,16 @@ Understanding the financial domain and the bigger picture. The main challenges w
   * Debit/credit ratios → risk scores
 
 **Understanding the bigger picture:**
-* Spent significant time on `app.py` and `prepare_data.py` — not just what the code does, but why
-* At first, the spec seemed complex because I had no frame of reference — I didn't understand the language until I'd worked through the project
-* Used AI tools to research financial domain concepts:
-  * How credit risk systems work (batch vs real-time processing)
-  * Open Banking regulations and data sharing patterns
-  * Typical API patterns for credit decisions
-* Working through the project helped me understand the spec — by the end, it became much clearer and more approachable
+* Spent significant time around `app.py` and `prepare_data.py` — not just *what* the code does, but *why* it exists in the context of lending and financial data.
+* Initially the spec felt complex because I had no frame of reference; the terminology only made sense once I worked through the project hands‑on.
+* Used AI tools to research financial‑domain concepts:
+  * how credit‑risk systems work (batch vs real‑time processing)
+  * Open Banking data flows and data‑sharing patterns
+  * typical API patterns for credit‑decisioning
+* Learned how [Atto](https://www.atto.co/solutions)’s  approach differs from traditional lending:
+  * traditional lending relies on static, backward‑looking data (credit scores, uploaded statements)
+  * Atto uses real‑time transaction behaviour to give lenders a fuller, more accurate picture of how customers actually spend, save, and earn
+  * this helped the spec “click” — the project became clearer and more intuitive once I understood the business context
 
 **FastAPI patterns:**
 * Attempted to relate to my Flask background
@@ -215,15 +218,16 @@ Keeps model versioned, accessible, and decoupled from code.
 * Latency spikes under load
 * Silent failures if monitoring is not in place
 
-**How I relate this to my experience:**
+**How I relate this to my experience:**  
 
-I've built lightweight production monitoring tools addressing these concepts for data pipelines and migrations. Demos below use dummy data and were built with RShiny/Flask.
+I've built lightweight production‑monitoring tools addressing similar concepts for data pipelines and migrations.  
+*All entities, field names, and data are entirely fictional and created solely for demonstration, with no connection to real healthcare systems or confidential information.*
 
 ---
 
 #### [Performance Monitor (2022–2023)](https://gillianpaterson.shinyapps.io/stored_proc_debugger/)
 
-  * Investigated a SQL stored procedure believed to be the sole cause of intermittent contention and delays.  
+  * Investigated a SQL stored procedure under scrutiny as the root cause of intermittent contention and delays.  
   * Added lightweight in‑procedure logging (no access to SQL diagnostics) to capture stage‑level execution times.  
   * Identified optimisation opportunities to keep the web process within its strict five‑minute SLA.  
   * Showed that delays had multiple contributors, not just the stored procedure — including external jobs and study‑specific setups.  
@@ -234,8 +238,8 @@ I've built lightweight production monitoring tools addressing these concepts for
 
 #### [Data Integrity Monitor (2024)](https://gillianpaterson.shinyapps.io/dashboard_monitor/)
 
-  * Supported release testing during the SQL Server → Snowflake migration.  
-  * Ran 100% cell‑level comparisons (4M rows, 90+ columns) to confirm extract outputs matched pre‑migration results.  
+  * Supported release testing and pro-active ongoing monitoring of SQL Server → Snowflake migration.  
+  * Ran 100% cell‑level comparisons (up to ~40M rows, 90+ columns) to confirm extract outputs matched pre‑migration results.  
   * Detected edge‑case issues early, surfacing anomalies that would have reached users without automated validation.  
   * Measured CDC latency, providing evidence that performance was below expectations.  
   * Strengthened data quality by replacing manual spot‑checks with automated controls, reducing the risk of silent drift.  
@@ -370,7 +374,7 @@ The API returned:
 }
 ```
 
-This confirmed the model loads correctly, accepts the expected input schema, and returns valid predictions.
+This confirms the model loads correctly, accepts the expected schema, and returns predictions assumed valid per its behaviour.
 
 See `artifacts/proof_of_prediction.png` and `artifacts/proof_data_entry.png` for screenshots showing successful execution.
 
@@ -496,10 +500,14 @@ credit-risk-assessment/
 
 # Future Improvements
 
-***(AI-generated suggestions that align with production best practices)***
+**Suggestions**
 
 * Retrain the model using extended features
 * Add model versioning and explicit feature schemas
-* Add monitoring for prediction drift and data drift *(similar to drift detection in my Data Integrity Monitor — see Question 6)*
+* Add monitoring for prediction drift and data drift (*similar to drift detection in my Data Integrity Monitor — see [Data Integrity Monitor](#data-integrity-monitor-2024)*).
 * Add authentication and rate limiting to the API
 * Containerize the service for production deployment
+
+**From my experience**
+* If not already considered: Independent validation — verify key outcomes using an alternative computation path (e.g., SQL vs Python)
+
