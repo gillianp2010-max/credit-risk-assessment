@@ -63,8 +63,8 @@ Understanding the financial domain and the bigger picture. The main challenges w
   * typical API patterns for credit‑decisioning
 * Learned how [Atto](https://www.atto.co/solutions)’s  approach differs from traditional lending:
   * traditional lending relies on static, backward‑looking data (credit scores, uploaded statements)
-  * Atto uses real‑time transaction behaviour to give lenders a fuller, more accurate picture of how customers actually spend, save, and earn
-  * this helped the spec “click” — the project became clearer and more intuitive once I understood the business context
+  * Atto uses real‑time transaction behaviour to give lenders a fuller, more accurate picture of how customers actually spend, save, and earn.
+* This helped the spec “click” — the project became clearer and more intuitive once I understood the business context.
 
 **FastAPI patterns:**
 * Attempted to relate to my Flask background
